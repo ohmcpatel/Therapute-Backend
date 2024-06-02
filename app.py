@@ -1,7 +1,7 @@
 from flask import Flask, request, send_file
 from dotenv import load_dotenv
 from flask_cors import CORS
-import os 
+import os
 import cv2
 import mediapipe as mp
 import numpy as np
@@ -10,6 +10,7 @@ import json
 import traceback
 from dtaidistance import dtw
 from datetime import datetime
+from google.cloud import storage
 
 
 load_dotenv()
@@ -17,6 +18,15 @@ app = Flask(__name__)
 CORS(app)
 
 app.config['DEBUG'] = os.environ.get('FLASK_DEBUG')
+
+def upload_to_gcs(file_name, bucket_name, destination_blob_name):
+    """Uploads a file to a Google Cloud Storage bucket."""
+    storage_client = storage.Client()
+    bucket = storage_client.bucket(bucket_name)
+    blob = bucket.blob(destination_blob_name)
+
+    blob.upload_from_filename(file_name)
+    print(f"File {file_name} uploaded to {destination_blob_name} in bucket {bucket_name}.")
 
 def engine():
     mp_drawing = mp.solutions.drawing_utils
@@ -189,6 +199,7 @@ def engine():
         with open("error_log.json", "a") as f:
             json.dump(data, f)
             f.write("\n")
+        upload_to_gcs("error_log.json", "therapute-video-bucket", "error_log.json")
 
     curr_frame = 0
 
@@ -342,6 +353,4 @@ def test():
     
 
 if __name__ == "__main__":
-    app.run()   
-
-
+    app.run()
