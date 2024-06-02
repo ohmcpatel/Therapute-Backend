@@ -9,4 +9,4 @@ Therapute-Backend utilizes a Python Flask to create a lightweight, scalable serv
 **2. Run the Application:**
 - Start the backend server by running: python app.py.
 
-Once you have completed these steps, please return to the following link to launch the frotnend: https://github.com/ohmcpatel/Therapute-Google-Solution-Challenge/tree/Production
+Once you have completed these steps, please return to the following link to launch the frontend: https://github.com/ohmcpatel/Therapute-Google-Solution-Challenge/tree/Production
