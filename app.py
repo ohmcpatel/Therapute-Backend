@@ -86,11 +86,15 @@ def engine():
         # if left_knee_angle < 90 or right_knee_angle < 90:
         #     errors.append("Don't bend down too much")
         
-        if abs(calc_dist(left_ankle, right_ankle) - calc_dist(left_hip, right_hip)) > 0.07:
+        if abs(calc_dist(left_ankle, right_ankle)) > 0.18:
             errors.append("Keep legs hip width apart")
+            #leg_error_occurences += 1
         
-        if abs(calc_dist(left_elbow, right_elbow) - calc_dist(left_shoulder, right_shoulder)) > 0.07:
+
+        
+        if abs(calc_dist(left_elbow, right_elbow)) > 0.16:
             errors.append("Keep elbows parallel to shoulders")
+            #elbow_error_occurences += 1
 
         return errors
 
@@ -231,9 +235,9 @@ def engine():
 
             # Extract landmarks
             try:
-                if curr_frame == min_frame and distance < 80:
+                if curr_frame == min_frame and distance > 80:
                     #Todo 
-                    cv2.putText(image, f'Ensure you bend down to a 90 degree knee angle!', (int(frame_width/2),int(frame_height/2)), cv2.FONT_HERSHEY_SIMPLEX, 1.2, (0,0,255), 2)
+                    cv2.putText(image, f'Ensure you bend down to a 90 degree knee angle!', (int(frame_width/4),int(frame_height/2)), cv2.FONT_HERSHEY_SIMPLEX, 1.2, (0,0,255), 2)
                     #Add 20 frames (pause) to saved video
                     curr_frame += 1
                     print('reached')
@@ -281,13 +285,13 @@ def engine():
                 image = cv2.addWeighted(overlay, alpha, image, 1 - alpha, 0)
 
                 if elbow_clr == (0, 0, 255):
-                    cv2.putText(image, f'Keep elbows at shoulder width apart!', (r_pixel_x1+50,r_pixel_y1+50), cv2.FONT_HERSHEY_SIMPLEX, 0.85, elbow_clr, 2)
+                    cv2.putText(image, f'Keep elbows at shoulder width apart!', (r_pixel_x1+50,r_pixel_y1+50), cv2.FONT_HERSHEY_SIMPLEX, 1.1, elbow_clr, 2)
                 else:
-                    cv2.putText(image, f'Good Elbow Placement!', (r_pixel_x1+50,r_pixel_y1+50), cv2.FONT_HERSHEY_SIMPLEX, 0.85, (0,255,0), 2)
+                    cv2.putText(image, f'Good Elbow Placement!', (r_pixel_x1+50,r_pixel_y1+50), cv2.FONT_HERSHEY_SIMPLEX, 1.1, (0,255,0), 2)
                 if leg_clr == (0, 0, 255):
-                    cv2.putText(image, f'Keep legs at hip width apart!', (r_pixel_x2+50,r_pixel_y2+50), cv2.FONT_HERSHEY_SIMPLEX, 0.85, leg_clr, 2)
+                    cv2.putText(image, f'Keep legs at hip width apart!', (r_pixel_x2+50,r_pixel_y2+50), cv2.FONT_HERSHEY_SIMPLEX, 1.1, leg_clr, 2)
                 else:
-                    cv2.putText(image, f'Good Feet Placement!', (r_pixel_x2+50,r_pixel_y2+50), cv2.FONT_HERSHEY_SIMPLEX, 0.85, (0,255,0), 2)
+                    cv2.putText(image, f'Good Feet Placement!', (r_pixel_x2+50,r_pixel_y2+50), cv2.FONT_HERSHEY_SIMPLEX, 1.1, (0,255,0), 2)
                 for x in range(2):
                     _out.write(image)
                         
